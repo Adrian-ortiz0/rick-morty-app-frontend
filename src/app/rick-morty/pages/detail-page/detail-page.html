@@ -1,0 +1,355 @@
+@if (loading()) {
+<div
+  class="min-h-screen flex items-center justify-center bg-linear-to-br from-primary/10 to-secondary/10"
+>
+  <div class="text-center">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
+    <p class="mt-4 text-lg">Cargando personaje...</p>
+  </div>
+</div>
+} @else if (character()) {
+<div
+  class="min-h-screen bg-linear-to-br from-primary/5 via-base-100 to-secondary/5"
+>
+  <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <button
+      [routerLink]="['/characters']"
+      class="btn btn-ghost gap-2 mb-6 hover:gap-4 transition-all"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      Volver a la lista
+    </button>
+
+    <div class="grid lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-1">
+        <div class="sticky top-8">
+          <div class="card bg-base-100 shadow-2xl overflow-hidden">
+            <figure class="relative">
+              <img
+                [src]="character()!.image"
+                [alt]="character()!.name"
+                class="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300"
+              />
+              <div class="absolute top-4 right-4">
+                <div
+                  class="badge badge-lg gap-2 shadow-lg"
+                  [ngClass]="getStatusColor(character()!.status)"
+                >
+                  <span class="text-xl"
+                    >{{ getStatusIcon(character()!.status) }}</span
+                  >
+                  <span class="font-bold">{{ character()!.status }}</span>
+                </div>
+              </div>
+            </figure>
+
+            <div class="card-body">
+              <h2 class="card-title text-3xl justify-center text-center">
+                {{ character()!.name }}
+              </h2>
+              <p class="text-center text-base-content/70">
+                ID: #{{ character()!.id }}
+              </p>
+            </div>
+          </div>
+
+          <div class="stats stats-vertical shadow-xl mt-6 w-full">
+            <div class="stat">
+              <div class="stat-figure text-3xl">
+                {{ getGenderIcon(character()!.gender) }}
+              </div>
+              <div class="stat-title">Género</div>
+              <div class="stat-value text-2xl">{{ character()!.gender }}</div>
+            </div>
+
+            <div class="stat">
+              <div class="stat-figure text-3xl">🧬</div>
+              <div class="stat-title">Especie</div>
+              <div class="stat-value text-2xl">{{ character()!.species }}</div>
+              @if (character()!.type) {
+              <div class="stat-desc">{{ character()!.type }}</div>
+              }
+            </div>
+
+            <div class="stat">
+              <div class="stat-figure text-3xl">📺</div>
+              <div class="stat-title">Episodios</div>
+              <div class="stat-value text-2xl">
+                {{ character()!.episode.length }}
+              </div>
+              <div class="stat-desc">apariciones totales</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2 space-y-6">
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h3 class="card-title text-2xl mb-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Información General
+            </h3>
+
+            <div class="grid md:grid-cols-2 gap-4">
+              <div
+                class="p-4 bg-base-200 rounded-lg hover:bg-base-300 transition-colors"
+              >
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-2xl">🌍</span>
+                  <h4 class="font-bold text-lg">Origen</h4>
+                </div>
+                <p class="text-base-content/80">
+                  {{ character()!.origin.name }}
+                </p>
+              </div>
+
+              <div
+                class="p-4 bg-base-200 rounded-lg hover:bg-base-300 transition-colors"
+              >
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-2xl">📍</span>
+                  <h4 class="font-bold text-lg">Ubicación Actual</h4>
+                </div>
+                <p class="text-base-content/80">
+                  {{ character()!.location.name }}
+                </p>
+              </div>
+
+              <div
+                class="p-4 bg-base-200 rounded-lg hover:bg-base-300 transition-colors"
+              >
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-2xl">📅</span>
+                  <h4 class="font-bold text-lg">Registrado</h4>
+                </div>
+                <p class="text-base-content/80">
+                  {{ character()!.created | date:'medium' }}
+                </p>
+              </div>
+
+              <div
+                class="p-4 bg-base-200 rounded-lg hover:bg-base-300 transition-colors"
+              >
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-2xl"
+                    >{{ getStatusIcon(character()!.status) }}</span
+                  >
+                  <h4 class="font-bold text-lg">Estado</h4>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div
+                    class="badge"
+                    [ngClass]="getStatusColor(character()!.status)"
+                  >
+                    {{ character()!.status }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h3 class="card-title text-2xl mb-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"
+                />
+              </svg>
+              Apariciones en Episodios
+              <div class="badge badge-lg">
+                {{ character()!.episode.length }} total
+              </div>
+            </h3>
+
+            @if (loadingEpisodes()) {
+            <div class="flex justify-center py-8">
+              <span class="loading loading-spinner loading-md"></span>
+            </div>
+            } @else if (episodes().length > 0) {
+            <div class="space-y-3">
+              @for (episode of episodes(); track episode.episode) {
+              <div class="alert shadow-md hover:shadow-lg transition-shadow">
+                <div class="flex-1">
+                  <div class="flex items-center gap-3">
+                    <div class="badge badge-primary">{{ episode.episode }}</div>
+                    <div class="flex-1">
+                      <h4 class="font-bold">{{ episode.name }}</h4>
+                      <p class="text-sm opacity-70">{{ episode.air_date }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              } @if (character()!.episode.length > 8) {
+              <div class="alert alert-info">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-current shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <span>
+                  <strong
+                    >+ {{ character()!.episode.length - 8 }} episodios
+                    más</strong
+                  >
+                  <br />
+                  Este personaje aparece en un total de {{
+                  character()!.episode.length }} episodios
+                </span>
+              </div>
+              }
+            </div>
+            }
+          </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h3 class="card-title text-2xl mb-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              Datos Técnicos
+            </h3>
+
+            <div class="overflow-x-auto">
+              <table class="table table-zebra">
+                <tbody>
+                  <tr>
+                    <td class="font-bold">ID del Personaje</td>
+                    <td>{{ character()!.id }}</td>
+                  </tr>
+                  <tr>
+                    <td class="font-bold">Nombre</td>
+                    <td>{{ character()!.name }}</td>
+                  </tr>
+                  <tr>
+                    <td class="font-bold">Estado</td>
+                    <td>
+                      <div
+                        class="badge"
+                        [ngClass]="getStatusColor(character()!.status)"
+                      >
+                        {{ character()!.status }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-bold">Especie</td>
+                    <td>{{ character()!.species }}</td>
+                  </tr>
+                  @if (character()!.type) {
+                  <tr>
+                    <td class="font-bold">Tipo</td>
+                    <td>{{ character()!.type }}</td>
+                  </tr>
+                  }
+                  <tr>
+                    <td class="font-bold">Género</td>
+                    <td>
+                      {{ getGenderIcon(character()!.gender) }} {{
+                      character()!.gender }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-bold">URL de API</td>
+                    <td>
+                      <a
+                        [href]="character()!.url"
+                        target="_blank"
+                        class="link link-primary"
+                      >
+                        Ver en API
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+} @else {
+<div
+  class="min-h-screen flex flex-col items-center justify-center bg-linear-to-br from-error/10 to-base-100"
+>
+  <div class="text-center">
+    <h2 class="text-5xl font-bold mb-4">😢 Oops!</h2>
+    <p class="text-2xl mb-8">Personaje no encontrado</p>
+    <button [routerLink]="['/characters']" class="btn btn-primary btn-lg">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+        />
+      </svg>
+      Volver a la lista
+    </button>
+  </div>
+</div>
+}

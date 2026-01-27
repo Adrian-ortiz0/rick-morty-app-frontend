@@ -1,0 +1,7 @@
+<app-top-menu
+  (searchByName)="onSearchName($event)"
+  (statusChange)="onStatusChange($event)"
+  (speciesChange)="onSpeciesChange($event)"
+/>
+
+<app-list-item [filters]="filters()" />

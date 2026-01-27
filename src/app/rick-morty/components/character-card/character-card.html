@@ -1,0 +1,22 @@
+<div
+  class="card bg-base-100 shadow-md cursor-pointer hover:shadow-lg transition"
+  [routerLink]="['/characters', character().id]"
+>
+  <figure>
+    <img [src]="character().image" [alt]="character().name" />
+  </figure>
+
+  <div class="card-body items-center text-center">
+    <h2 class="card-title justify-center">
+      {{ character().name }}
+      <div class="badge badge-outline">{{ character().status }}</div>
+    </h2>
+
+    <p class="text-sm opacity-70">
+      {{ character().species }} - {{ character().gender }}
+    </p>
+    <p class="text-sm opacity-70">
+      Ubicación: {{ character().location.name }}
+    </p>
+  </div>
+</div>
