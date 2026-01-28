@@ -62,7 +62,8 @@
               "buildTarget": "rick-morty-app:build:production"
             },
             "development": {
-              "buildTarget": "rick-morty-app:build:development"
+              "buildTarget": "rick-morty-app:build:development",
+              "proxyConfig": "proxy.config.json"
             }
           },
           "defaultConfiguration": "development"
