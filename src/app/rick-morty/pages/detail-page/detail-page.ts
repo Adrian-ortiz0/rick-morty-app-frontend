@@ -1,5 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { Character, FullCharacter } from '../../interfaces/character.interface';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
+import { FullCharacter } from '../../interfaces/character.interface';
 import { RickMortyService } from '../../services/rick-morty.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -11,7 +17,7 @@ import { DatePipe, NgClass } from '@angular/common';
   templateUrl: './detail-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DetailPage { 
+export class DetailPage {
   private route = inject(ActivatedRoute);
   private rmService = inject(RickMortyService);
 
@@ -20,9 +26,13 @@ export class DetailPage {
   loading = signal(true);
   loadingEpisodes = signal(false);
 
-  ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (id) {
+  constructor() {
+    effect(() => {
+      const id = Number(this.route.snapshot.paramMap.get('id'));
+      if (!id) return;
+
+      this.loading.set(true);
+
       this.rmService.getCharacterById(id).subscribe({
         next: (c) => {
           this.character.set(c);
@@ -33,15 +43,17 @@ export class DetailPage {
           this.loading.set(false);
         },
       });
-    }
+    });
   }
   loadEpisodes(episodeUrls: string[]) {
     if (episodeUrls.length === 0) return;
 
     this.loadingEpisodes.set(true);
     const episodesToLoad = episodeUrls.slice(0, 8);
-    const episodeRequests = episodesToLoad.map(url => this.rmService.getEpisode(url));
-    
+    const episodeRequests = episodesToLoad.map((url) =>
+      this.rmService.getEpisode(url),
+    );
+
     forkJoin(episodeRequests).subscribe({
       next: (episodes) => {
         this.episodes.set(episodes);
@@ -50,7 +62,7 @@ export class DetailPage {
       error: () => {
         this.episodes.set([]);
         this.loadingEpisodes.set(false);
-      }
+      },
     });
   }
 

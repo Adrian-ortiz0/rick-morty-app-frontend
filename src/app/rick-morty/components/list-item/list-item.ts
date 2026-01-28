@@ -9,7 +9,6 @@ import {
 import { Character } from '../../interfaces/character.interface';
 import { RickMortyService } from '../../services/rick-morty.service';
 import { CharacterCard } from '../character-card/character-card';
-import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-list-item',

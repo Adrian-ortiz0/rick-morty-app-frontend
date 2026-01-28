@@ -1,13 +1,13 @@
 import { Component, effect, input, linkedSignal, output } from '@angular/core';
 
+let initialized = false;
+
 @Component({
   selector: 'app-top-menu',
   imports: [],
-  standalone: true,
   templateUrl: './top-menu.html',
 })
-export class TopMenu { 
-
+export class TopMenu {
   debounceTime = input(500);
 
   searchByName = output<string>();
@@ -18,6 +18,11 @@ export class TopMenu {
 
   debounceEffect = effect((onCleanup) => {
     const value = this.searchValue();
+
+    if (!initialized) {
+      initialized = true;
+      return;
+    }
 
     const t = setTimeout(() => {
       this.searchByName.emit(value.trim());

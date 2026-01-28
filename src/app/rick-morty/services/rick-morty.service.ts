@@ -52,14 +52,8 @@ export class RickMortyService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/character`;
 
-  searchCharacters(
-    page: number,
-    name?: string,
-    status?: string,
-    species?: string,
-  ): Observable<{ info: any; results: Character[] }> {
+  searchCharacters(page: number,name?: string,status?: string,species?: string,): Observable<{ info: any; results: Character[] }> {
     let params = new HttpParams().set('page', page.toString());
-
     if (name?.trim()) params = params.set('name', name.trim());
     if (status?.trim()) params = params.set('status', status.trim());
     if (species?.trim()) params = params.set('species', species.trim());
