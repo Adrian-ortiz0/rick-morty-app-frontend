@@ -13,7 +13,7 @@ import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-list-item',
-  imports: [CharacterCard, RouterLink],
+  imports: [CharacterCard],
   templateUrl: './list-item.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
